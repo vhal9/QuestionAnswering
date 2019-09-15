@@ -1,0 +1,4 @@
+jupyter
+unicode
+nltk
+spacy

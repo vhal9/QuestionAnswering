@@ -1,11 +1,11 @@
 # QuestionAnswering
-##Este é um repositório para o desenvolvimento de um projeto de IC, que consiste em uma ferramenta de perguntas e respostas com enfâse em linguagem informal.
+## Este é um repositório para o desenvolvimento de um projeto de IC, que consiste em uma ferramenta de perguntas e respostas com enfâse em linguagem informal.
 
 #Requisitos:
 - Python3.6 ou superior.
 - virtualENV
 
-#Execução Padrão:
+# Execução Padrão:
 > Prepare o ambiente ```vitualenv [nomeDaVM]```
 > Clone o repositório ```git clone [Repositório]```
 > Vá para a pasta do repositório ```cd [Repositório]```

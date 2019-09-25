@@ -2,3 +2,4 @@ jupyter
 unicode
 nltk
 spacy
+requests

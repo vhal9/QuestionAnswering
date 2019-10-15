@@ -13,7 +13,6 @@ class Morpho:
         lista.remove(lista[0])
         for word in lista:
             sentence += ' ' + word
-        print(sentence)
         doc = self.nlp(sentence)
         
         #lista que que irá conter as tuplas de cada palavra da string

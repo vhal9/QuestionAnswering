@@ -3,3 +3,4 @@ unicode
 nltk
 spacy
 requests
+wikipedia

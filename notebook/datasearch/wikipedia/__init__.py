@@ -1,0 +1,1 @@
+from .wikipediaApi import Wiki

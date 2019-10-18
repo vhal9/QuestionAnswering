@@ -1,1 +1,1 @@
-from .searching import Searching
+__all__ = ["wikidata", "wikipedia"]

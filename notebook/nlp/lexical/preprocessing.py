@@ -31,11 +31,9 @@ class Preprocessing:
     def stemmize(self, tokens):
         return [self.stemmer.stem(word) for word in tokens]
     #colocar as palavras em letras minusculas
-    def lowercase(self, sentence):
-        token = []
-        for word in sentence:
-            token.append(word.lower())
-        return token
+    def lowercase(self, text):
+        text.lower()
+        return text
     #remover stopwords com base na lista de stopwords do nltk
     def remove_stopwords(self, sentence):
         for word in sentence:

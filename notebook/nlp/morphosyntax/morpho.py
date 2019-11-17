@@ -7,12 +7,7 @@ class Morpho:
         self.nlp = spacy.load(language)
         
     #a funçao tag() recebe uma string e retorna uma lista de tuplas da string recebida contendo a (palavras, etiqueta morfossintatica da palavra)
-    def tag(self, lista):
-        #recebe uma string e transforma em objeto doc
-        sentence = str(lista[0])
-        lista.remove(lista[0])
-        for word in lista:
-            sentence += ' ' + word
+    def tag(self, sentence):
         doc = self.nlp(sentence)
         
         #lista que que irá conter as tuplas de cada palavra da string

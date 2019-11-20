@@ -32,7 +32,7 @@ class Searching:
         parameters = {
             'action': 'wbgetentities',
             'format': 'json',
-            'language': 'pt',
+            'language': 'pt-br',
             'sites': sites,
             'titles': titles,
             'ids': ids}

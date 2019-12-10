@@ -28,7 +28,6 @@ class Searching:
     """funcao para retornar dados acerca de n entidades, funcao wbgetentities"""
     """entrada: ids, sites, titles"""
     def getEntitie(self, ids, sites, titles):
-        action = 'wbgetentities'
         parameters = {
             'action': 'wbgetentities',
             'format': 'json',
@@ -37,7 +36,10 @@ class Searching:
             'titles': titles,
             'ids': ids}
         return self.request(parameters)
-    
+    '''
+    def getClaim(self, data):
+    '''   
+      
     """funcao para realizar a requisicao na api"""
     """entrada: lista de parametros"""
     """saida: uma lista de dicionario com as informacoes da entidade (formato json)"""

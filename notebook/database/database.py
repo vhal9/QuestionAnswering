@@ -73,38 +73,51 @@ class Database:
     """Bloco de consultas"""
 
     """consultar todas entidades"""
-    def consultarAllEntitie(self):
+    def getAllEntitie(self):
         consulta = "SELECT * FROM entitie "
-        return self.c.execute(consulta)
+        return self.getAccess(consulta)
 
     """consultar uma entidade"""
-    def consultarEntidade(self, idEntidade):
+    def getEntitie(self, idEntidade):
         consulta = "SELECT * FROM entitie WHERE entitie.idEnt = '"+ idEntidade + "'"
-        return self.c.execute(consulta)
+        return self.getAccess(consulta)
 
     """consultar todas propriedades"""
-    def consultarAllProperty(self):
+    def getAllProperty(self):
         consulta = "SELECT * FROM property"
-        return self.c.execute(consulta)
+        return self.getAccess(consulta)
 
     """consultar uma propriedade"""
-    def consultarProperty(self, idProp):
+    def getProperty(self, idProp):
         consulta = "SELECT * FROM property P WHERE P.idProp = '"+idProp+"'"
-        return self.c.execute(consulta)
+        return self.getAccess(consulta)
 
     """consultar todas relacoes"""
-    def consultarAllRelation(self):
+    def getAllRelation(self):
         consulta = "SELECT * FROM relation"
-        return self.c.execute(consulta)
+        return self.getAccess()
+    """consultar relacoes retornando (nome Entidade 1, propriedade, nome Entidade 2)"""
+    def getAllRelations(self):
+        consulta = "SELECT E.name, P.desc, V.name  FROM ((entitie E INNER JOIN relation R ON E.idEnt = R.idEnt1) INNER JOIN property P ON R.idProp = P.idProp) INNER JOIN entitie V ON R.idEnt2 = V.idEnt"
+        return self.getAccess(consulta)
     """consultar relacao por entidade"""
-    def consultarRelations(self, idEntidade):
-        consulta = "SELECT E.name, P.desc, R.idEnt2  FROM (entitie E LEFT JOIN relation R ON E.idEnt = R.idEnt1) LEFT JOIN property P ON R.idProp = P.idProp WHERE E.idEnt = '"+idEntidade+"'"
+    def getRelation(self, idEntidade):
+        consulta = "SELECT E.name, P.desc, R.name  FROM (entitie E LEFT JOIN relation R ON E.idEnt = R.idEnt1) LEFT JOIN property P ON R.idProp = P.idProp WHERE E.idEnt = '"+idEntidade+"'"
+        return self.getAccess(consulta)
+    """consultar entidades que foram trazidas em uma relacao e não foram mapeadas para a tabela entitie"""
+    def getEntitiesNotMapped(self):
+        consulta = "SELECT R.idEnt2 FROM relation R LEFT JOIN entitie E ON R.idEnt2 = E.idEnt WHERE E.idEnt IS NULL"
+        return self.getAccess(consulta)
+############################################################################################################################## 
+    """funcao responsavel por realizar uma consulta especificada ao banco de dados"""
+    def getAccess(self, consulta):
         try:
             resposta = self.c.execute(consulta)
             pass
         except Exception as e:
-            reposta = 'erro'
+            reposta = e
         return resposta
-
+##############################################################################################################################
+    """Finalizar conexao"""
     def finalizarConnection(self):
         self.connection.close()

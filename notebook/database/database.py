@@ -81,6 +81,9 @@ class Database:
     def getEntitie(self, idEntidade):
         consulta = "SELECT * FROM entitie WHERE entitie.idEnt = '"+ idEntidade + "'"
         return self.getAccess(consulta)
+    def getEntitieID(self, entidade):
+        consulta = "SELECT idEnt FROM entitie WHERE entitie.name = '"+ entidade +"'"
+        return self.getAccess(consulta)
 
     """consultar todas propriedades"""
     def getAllProperty(self):
@@ -90,6 +93,12 @@ class Database:
     """consultar uma propriedade"""
     def getProperty(self, idProp):
         consulta = "SELECT * FROM property P WHERE P.idProp = '"+idProp+"'"
+        print(consulta)
+        return self.getAccess(consulta)
+    """consultar o id de uma propriedade"""
+    def getPropertyID(self, prop):
+        consulta = "SELECT idProp FROM property WHERE property.desc = '"+ prop +"'"
+        print(consulta)
         return self.getAccess(consulta)
 
     """consultar todas relacoes"""
@@ -108,9 +117,15 @@ class Database:
     def getEntitiesNotMapped(self):
         consulta = "SELECT R.idEnt2 FROM relation R LEFT JOIN entitie E ON R.idEnt2 = E.idEnt WHERE E.idEnt IS NULL"
         return self.getAccess(consulta)
+    """consultar uma entidade a partir de uma relacao com outra entidade e uma propriedade"""
+    def getEntitieInRelation(self, idEntidade, idProperty):
+        consulta = "SELECT E.name FROM (entitie E INNER JOIN relation R ON E.idEnt = R.idEnt2) WHERE R.idEnt1 = '"+idEntidade+"' AND R.idProp = '"+idProperty+"'"
+        print(consulta)
+        return self.getAccess(consulta)
 ############################################################################################################################## 
     """funcao responsavel por realizar uma consulta especificada ao banco de dados"""
     def getAccess(self, consulta):
+        resposta = []
         try:
             resposta = self.c.execute(consulta)
             pass

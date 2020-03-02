@@ -21,7 +21,9 @@
 
 ## Como executar o projeto (versão atual):
 
-> Prepare o ambiente ```vitualenv [nomeDaVM]```
+> Criar a virtual env ```vitualenv [nomeDaVM]```
+
+> Prepare o ambiente virtual ``` source [nomeDaVM]/bin/activate```
 
 > Clone o repositório ```git clone [Repositório]```
 

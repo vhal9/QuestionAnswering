@@ -1,7 +1,7 @@
 # QuestionAnswering
 
 ## Resumo:
-### Este é um repositório para o desenvolvimento de um projeto que consiste em uma ferramenta de perguntas e respostas com enfâse em linguagem informal, utilizando a base de conhecimento estruturados da Wikidata e não estruturados da Wikipedia.
+  Este é um repositório para o desenvolvimento de um projeto que consiste em uma ferramenta de perguntas e respostas com enfâse em linguagem informal, utilizando a base de conhecimento estruturados da Wikidata e não estruturados da Wikipedia.
 
 ## Projeto Desenvolvido no Python 3.6.
 

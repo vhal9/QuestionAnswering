@@ -34,5 +34,4 @@
 > Suba o servidor de notebooks ```jupyter notebook```
 
 ## Diagrama da arquitetura do projeto
-[!alt text](https://github.com/vhal9/QuestionAnswering/blob/master/Diagrama%20conceitual%20do%20projeto.jpg)
-
+![Screenshot](Diagrama Conceitual do projeto.jpeg)

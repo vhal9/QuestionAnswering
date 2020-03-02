@@ -19,9 +19,15 @@
 - jupyter
 
 
-## Como executar o projeto:
+## Como executar o projeto (versão atual):
+
 > Prepare o ambiente ```vitualenv [nomeDaVM]```
+
 > Clone o repositório ```git clone [Repositório]```
+
 > Vá para a pasta do repositório ```cd [Repositório]```
+
 > Instalar pacotes necessários ```pip3 install -r requirements.txt```
+
 > Suba o servidor de notebooks ```jupyter notebook```
+

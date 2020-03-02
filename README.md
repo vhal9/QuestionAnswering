@@ -1,7 +1,7 @@
 # QuestionAnswering
 
 ## Resumo:
-  Este é um repositório para o desenvolvimento de um projeto que consiste em uma ferramenta de perguntas e respostas com enfâse em linguagem informal, utilizando a base de conhecimento estruturados da Wikidata e não estruturados da Wikipedia.
+  Este é um repositório contém o desenvolvimento de um projeto de IC, que consiste em uma ferramenta de perguntas e respostas com enfâse em linguagem informal, utilizando a base de conhecimento estruturados da Wikidata e não estruturados da Wikipedia.
 
 ## Projeto Desenvolvido no Python 3.6.
 
@@ -32,4 +32,7 @@
 > Instalar pacotes necessários ```pip3 install -r requirements.txt```
 
 > Suba o servidor de notebooks ```jupyter notebook```
+
+## Diagrama da arquitetura do projeto
+[!alt text](https://github.com/vhal9/QuestionAnswering/blob/master/Diagrama%20conceitual%20do%20projeto.jpg)
 

@@ -18,9 +18,10 @@
 - virtualenv
 - jupyter
 
-## Versão Atual
+## Estado Atual
 - Arquivo jupyter do processamento das perguntas, processando as perguntas e buscando a resposta utilizando a classe RotinaBD
 - Classe RotinaBD que busca a resposta a pergunta no banco de dados.
+- Classe QuestionProcessing inacabada, esperando a lapidação do processamento das perguntas
 
 ## Como executar o projeto (versão atual):
 

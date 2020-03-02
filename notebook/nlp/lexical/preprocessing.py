@@ -32,8 +32,7 @@ class Preprocessing:
         return [self.stemmer.stem(word) for word in tokens]
     #colocar as palavras em letras minusculas
     def lowercase(self, text):
-        text.lower()
-        return text
+        return text.lower()
     #remover stopwords com base na lista de stopwords do nltk
     def remove_stopwords(self, sentence):
         for word in sentence:

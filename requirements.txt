@@ -4,3 +4,5 @@ nltk
 spacy
 requests
 wikipedia
+os
+pandas

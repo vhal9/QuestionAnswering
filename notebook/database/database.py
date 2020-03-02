@@ -107,7 +107,7 @@ class Database:
         return self.getAccess()
     """consultar relacoes retornando (nome Entidade 1, propriedade, nome Entidade 2)"""
     def getAllRelations(self):
-        consulta = "SELECT E.name, P.desc, V.name  FROM ((entitie E INNER JOIN relation R ON E.idEnt = R.idEnt1) INNER JOIN property P ON R.idProp = P.idProp) INNER JOIN entitie V ON R.idEnt2 = V.idEnt"
+        consulta = "SELECT E.name, P.desc, V.name FROM ((entitie E INNER JOIN relation R ON E.idEnt = R.idEnt1) INNER JOIN property P ON R.idProp = P.idProp) INNER JOIN entitie V ON R.idEnt2 = V.idEnt"
         return self.getAccess(consulta)
     """consultar relacao por entidade"""
     def getRelation(self, idEntidade):

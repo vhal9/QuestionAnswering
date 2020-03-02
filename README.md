@@ -36,5 +36,5 @@
 
 > Suba o servidor de notebooks ```jupyter notebook```
 
-## Diagrama da arquitetura do projeto
+## Diagrama da Arquitetura ao Final do Projeto 
 ![Screenshot](ArquiteturaDoProjeto.jpg)

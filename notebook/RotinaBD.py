@@ -1,55 +1,34 @@
 from datasearch import wikidata
 from database import database   
 class RotinaBD():
-    """docstring for RotinaBD"""
-    
+    '''docstring for RotinaBD'''
+    '''construtor da classe'''
     def __init__(self):
+        #instancia o objeto da classe Database para acesso ao banco de dados
         self.db = database.Database()
+        #instancia o objeto Searching para acesso acesso a wikidata
         self.api = wikidata.searching.Searching()
-    '''dados = {'entidade': ' ', property:' '}'''
-    ''''''
-    def buscarInformacao(self, dados):
-        resposta = []
-        # verificar se nao tem a entidade no banco de dados
-        print("verificando se tem a entidade...")
-        if (not self.verificarEntidade(dados['entidade'])):
-            print("entidade não encontrada \n buscando na wikidata")
-            #se nao, baixar os dados da entidade e seus claims
-            self.baixarInformacao(dados['entidade'])
-        try:
-            print("buscando o id da entidade...")
-            #buscar o id da entidade
-            idEntidade = self.buscarIdEntidade(dados['entidade'])
-            print(idEntidade)
-            #buscar o id da propriedade
-            print("buscando o id da propriedade...")
-            idPropriedade = self.buscarIdPropriedade(dados['propriedade'])
-            print(idPropriedade)
-            # buscar entidade resposta
-            print("buscando relacao...")
-            resposta = self.buscarNoBD(idEntidade, idPropriedade)
-            pass
-        except Exception as e:
-            raise e
-            print(e)
-        return resposta
-    '''busca o id da entidade'''
+    
+    '''Funcao para buscar id's associados a uma entidade de entrada'''
+    '''Entrada: string'''
+    '''saida: lista com os possiveis ids no formato string'''
     def buscarIdEntidade(self, entidade):
+        #busca os ids da entidade no banco de dados
         resultado = self.db.getEntitieID(entidade)
-        elemento = []
-        for tupla in resultado:
-            for string in tupla:
-                elemento.append(string)
-        return elemento
-    '''busca o id da propriedade'''
+        #extrair os elementos do objeto do banco de dados retornado
+        ids = self.extracaoDeStringDoObjetoDoBD(resultado)
+        return ids
+    '''Funcao para buscar os id's associados a uma propriedade de entrada'''
+    '''Entrada: string'''
+    '''Saida: lista com os possiveis ids no formato string'''
     def buscarIdPropriedade(self, propriedade):
+        #busca os ids da propriedade no banco de dados
         resultado = self.db.getPropertyID(propriedade)
-        elemento = []
-        for tupla in resultado:
-            for string in tupla:
-                elemento.append(string)
-        return elemento
-    '''consultar no BD a(s) relacao(oes) com o id da entidade e da propriedade'''
+        ids = self.extracaoDeStringDoObjetoDoBD(resultado)
+        return ids
+    '''Funcao para extrair do banco de dado(s) as entidade(s) a partir do(s) id(s) da(s) entidade(s) e id(s) da(s) propriedade(s) consultando no BD a(s) relacao(oes) com o(s) id(s) da(s) entidade(s) e da(s) propriedade(s)'''
+    '''Entrada: lista de idEntidade e lista idPropriedade, ambas em formato string'''
+    '''Saida: lista de ids no formato string'''
     def buscarNoBD(self, idEntidade, idPropriedade):
         print("buscando a entidade resposta ...")
         resposta = []
@@ -63,7 +42,9 @@ class RotinaBD():
                         print('imprime string', string)
                         resposta.append(string)
         return resposta
-    '''verifica se ha alguma entidade que corresponda a entidade procurada'''
+    '''Funcao para verificar se ha alguma entidade no banco de dados associada a entidade buscada'''
+    '''Entrada: entidade no formato string'''
+    '''Saida: booleano'''
     def verificarEntidade(self, entidade):
         consulta = self.db.getEntitieID(entidade)
         entidades = []
@@ -72,7 +53,9 @@ class RotinaBD():
         if entidades == []:
             return False
         return True
-    '''busca na wikidata a entidade buscada e a salva no BD'''
+    
+    '''Metodo para buscar na wikidata a entidade buscada e a salvar no BD'''
+    '''Entrada: entidade no formato string'''
     def baixarInformacao(self, entidade):
         dados = api.entitie(entidade).json()['search']
         '''para consultar a entidade necessita do link e do Qid'''
@@ -88,7 +71,9 @@ class RotinaBD():
         print("inserindo no banco de dados...")
         print(dadosEntidade)
         self.inserirDados(dadosEntidade, dadosPropriedades)
-    '''extrair informações do json da entidade recuperado na wikidata'''
+    '''Funcao para extrair informações do json da entidade recuperado na wikidata'''
+    '''Entrada: dicionarios com dados sobre a entidade extraidas da wikidata'''
+    '''Saida: dicionario com dados especificos da entidade para serem salvos no banco de dados'''
     def extrairInformacaoDaEntidade(self, dataEntitie, dados):
         entidade = {'id':'', 'name':'', 'desc':'', 'pageid':'', 'url':''}
         '''get id'''
@@ -123,30 +108,80 @@ class RotinaBD():
             except Exception as e:
                 entidade['desc'] = dataEntitie[id[0]]['descriptions']['en']['value']
         return entidade
-    '''extrair informações do json da propriedade recuperado na wikidata'''
+    
+    '''Funcao para extrair informações sobre as propriedades do json das entidades buscadas na wikidata'''
+    '''Entrada: dicionario com os dados extraidos sobre a entidade na wikidata'''
+    '''Saida: dicionario com id da entidade e outro dicionario com as propriedades e entidades associadas do tipo: '''
+    '''
+        {entidade:
+            {propriedade1: entidade1, propriedade2:entidade2, ...}
+        }
+    '''
     def extrairPropriedadesDaEntidade(self, dataEntitie):
-        entidades = {}
+        relacoes = {}
         propriedades = {}
         qId = None
         for key in dataEntitie:
             qId = key
         for relacao in dataEntitie[qId]['claims']:
-            relacoes.append(relacao)
             try:
                 propriedades[relacao] = dataEntitie[qId]['claims'][relacao][0]['mainsnak']['datavalue']['value']['id']
                 pass
             except Exception as e:
                 propriedades[relacao] = 'desconhecido'
-        entidades[qId] = propriedades
-        return entidades
-    def inserirDados(self, entidade, relation):
-        self.db.insertEntitie(entitie)
-        for entidade in entidades:
-            for property in entidades[entidade]:
-                relation = [entidade, entidades[entidade][property], property]
+        relacoes[qId] = propriedades
+        return relacoes
+
+    '''Metodo para salvar os dados baixados na wikidata, salvando a entidade e as relacoes a ela'''
+    '''Entrada: dicionrio com informacoes sobre a entidade e dicionario com as relacoes sobre a entidade'''
+    def inserirDados(self, entidade, relacoes):
+        #inserir entidade
+        self.db.insertEntitie(entidade)
+        #inserir relacoes
+        for idEntidade in relacoes:
+            for property in relacoes[idEntidade]:
+                relation = [idEntidade, relacoes[idEntidade][property], property]
                 print(relation)
-                if entidades[entidade][property] != 'desconhecido':
+                if relacoes[idEntidade][property] != 'desconhecido':
                     self.db.insertRelation(relation)
+
+    '''Funcao para extrair lista de informacoes de um objeto de retorno do banco de dados'''
+    '''Entrada: objeto formato sql'''
+    '''Saida: lista de strings'''
+    def extracaoDeStringDoObjetoDoBD(self,objeto):
+        informacoes = []
+        for tupla in objeto:
+            for string in tupla:
+                informacoes.append(string)
+        return informacoes
+    '''Funcao para retornar entidades como resposta a consultas do tipo entidade(propriedade, X)'''
+    '''entrada = dados = {'entidade': ' ', property:' '}'''
+    '''saida = '''
+    def buscarInformacao(self, dados):
+        resposta = []
+        # verificar se ha correspondencia da entidade no banco de dados
+        print("verificando se há correspondencia da entidade na Base de Dados...")
+        if (not self.verificarEntidade(dados['entidade'])):
+            print("entidade não encontrada \nbuscando na wikidata")
+            #se nao, baixar os dados da entidade e seus claims
+            self.baixarInformacao(dados['entidade'])
+        try:
+            print("buscando o id da entidade...")
+            #buscar o id da entidade
+            idEntidade = self.buscarIdEntidade(dados['entidade'])
+            print(idEntidade)
+            #buscar o id da propriedade
+            print("buscando o id da propriedade...")
+            idPropriedade = self.buscarIdPropriedade(dados['propriedade'])
+            print(idPropriedade)
+            # buscar entidade resposta
+            print("buscando relacao...")
+            resposta = self.buscarNoBD(idEntidade, idPropriedade)
+            pass
+        except Exception as e:
+            raise e
+            print(e)
+        return resposta
     '''destruct da classe, finalizando a conexao com o banco de dados'''
     def __del__(self):
         self.db.finalizarConnection()

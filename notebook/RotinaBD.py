@@ -14,7 +14,7 @@ class RotinaBD():
     '''saida: lista com os possiveis ids no formato string'''
     def buscarIdEntidade(self, entidade):
         #busca os ids da entidade no banco de dados
-        resultado = self.db.getEntitieID(entidade)
+        resultado = self.db.getIdEntitie(entidade)
         #extrair os elementos do objeto do banco de dados retornado
         ids = self.extracaoDeStringDoObjetoDoBD(resultado)
         return ids
@@ -28,10 +28,10 @@ class RotinaBD():
         return ids
     '''Funcao para extrair do banco de dado(s) as entidade(s) a partir do(s) id(s) da(s) entidade(s) e id(s) da(s) propriedade(s) consultando no BD a(s) relacao(oes) com o(s) id(s) da(s) entidade(s) e da(s) propriedade(s)'''
     '''Entrada: lista de idEntidade e lista idPropriedade, ambas em formato string'''
-    '''Saida: lista de ids no formato string'''
+    '''Saida: lista de nomes no formato string'''
     def buscarNoBD(self, idEntidade, idPropriedade):
         print("buscando a entidade resposta ...")
-        resposta = []
+        ids = []
         for id in idEntidade:
             for idP in idPropriedade:
                 print('buscando',id, idP)
@@ -40,13 +40,46 @@ class RotinaBD():
                     print("imprime tupla", tupla)
                     for string in tupla:
                         print('imprime string', string)
-                        resposta.append(string)
+                        ids.append(string)
+        resposta = []
+        for id in ids:
+            #verificar se a entidade esta mapeada
+            nome = self.buscarNomeEntidade(id)
+            resposta.append(nome)
         return resposta
+    def verificarIdEntidade(self, idEntidade):
+        entidade = self.db.getEntitie(idEntidade)
+        correspondencia = 0
+        for ent in entidade:
+            correspondencia +=1
+        if correspondencia > 0:
+            return True
+        else:
+            return False
+    def buscarNomeEntidade(self,idEntidade):
+        nome = ''
+        if(not self.verificarIdEntidade(idEntidade)):
+            nome = self.baixarNomeEntidade(idEntidade)
+        else:
+            nome = self.db.getNomeEntidade(idEntidade)
+        return nome
+    def baixarNomeEntidade(self,idEntidade):
+        dados = self.api.entitie(idEntidade).json()['search']
+        '''para consultar a entidade necessita do link e do Qid'''
+        site = dados[0]['concepturi']
+        id = dados[0]['id']
+        title = dados[0]['title']
+        print("entidade encontrada:")
+        print(id, title, site)
+        dataEntitie = self.api.getEntitie(id, site, title).json()['entities']
+        print("extraindo informações...")
+        dadosEntidade = self.extrairInformacaoDaEntidade(dataEntitie, dados)
+        return dadosEntidade['name']
     '''Funcao para verificar se ha alguma entidade no banco de dados associada a entidade buscada'''
     '''Entrada: entidade no formato string'''
     '''Saida: booleano'''
     def verificarEntidade(self, entidade):
-        consulta = self.db.getEntitieID(entidade)
+        consulta = self.db.getIdEntitie(entidade)
         entidades = []
         for elemento in consulta:
             entidades.append(elemento)
@@ -57,14 +90,14 @@ class RotinaBD():
     '''Metodo para buscar na wikidata a entidade buscada e a salvar no BD'''
     '''Entrada: entidade no formato string'''
     def baixarInformacao(self, entidade):
-        dados = api.entitie(entidade).json()['search']
+        dados = self.api.entitie(entidade).json()['search']
         '''para consultar a entidade necessita do link e do Qid'''
         site = dados[0]['concepturi']
         id = dados[0]['id']
         title = dados[0]['title']
         print("entidade encontrada:")
         print(id, title, site)
-        dataEntitie = api.getEntitie(id, site, title).json()['entities']
+        dataEntitie = self.api.getEntitie(id, site, title).json()['entities']
         print("extraindo informações...")
         dadosEntidade = self.extrairInformacaoDaEntidade(dataEntitie, dados)
         dadosPropriedades = self.extrairPropriedadesDaEntidade(dataEntitie)
@@ -143,6 +176,7 @@ class RotinaBD():
                 relation = [idEntidade, relacoes[idEntidade][property], property]
                 print(relation)
                 if relacoes[idEntidade][property] != 'desconhecido':
+                    print('inserindo', relation)
                     self.db.insertRelation(relation)
 
     '''Funcao para extrair lista de informacoes de um objeto de retorno do banco de dados'''

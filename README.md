@@ -6,15 +6,19 @@
 ## Projeto Desenvolvido no Python 3.6.
 
 ## Bibliotecas:
+### Processamento de textos
 - unicode
 - nltk
 - spacy
+
+### Rotinas de requisições
 - requests
 - wikipedia
+### Manipulação de dados
 - sqlite3
 - os
 - pandas
-### bibliotecas opcionais
+### bibliotecas para desenvolvimento(opcionais)
 - virtualenv
 - jupyter
 
@@ -39,3 +43,7 @@
 
 ## Diagrama da Arquitetura ao Final do Projeto 
 ![Screenshot](ArquiteturaDoProjeto.jpg)
+
+## Diagrama do Banco de dados
+![Screenshot](notebook/database/database\ IC.jpeg)
+

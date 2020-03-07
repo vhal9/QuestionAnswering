@@ -45,5 +45,5 @@
 ![Screenshot](ArquiteturaDoProjeto.jpg)
 
 ## Diagrama do Banco de dados
-![Screenshot](notebook/database/database IC.jpeg)
+![Screenshot](notebook/database/database%20IC.jpeg)
 

@@ -25,7 +25,7 @@
 ## Estado Atual
 - Arquivo jupyter do processamento das perguntas, processando as perguntas e buscando a resposta utilizando a classe RotinaBD
 - Classe RotinaBD que busca a resposta a pergunta no banco de dados.
-- Classe QuestionProcessing inacabada, esperando a lapidação do processamento das perguntas
+- Classe QuestionProcessing: primeira versão com retorno de dicionario: {entidade, propriedade, indicadorPergunta, sinonimoPropriedade}, utilizando apenas o WordNet para desambiguar
 
 ## Como executar o projeto (versão atual):
 

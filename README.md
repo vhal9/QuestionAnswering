@@ -33,9 +33,9 @@
 
 - Opcional:
 
-> Criar a virtual env ```vitualenv [nomeDaVM]```
+> Criar a virtual env ```vitualenv [nomeDaVM]```.
 
-> Prepare o ambiente virtual ``` source [nomeDaVM]/bin/activate```
+> Prepare o ambiente virtual ``` source [nomeDaVM]/bin/activate```.
 
 - Recomendado:
 
@@ -50,15 +50,15 @@
 > Abra o arquivo notebook/Testar classe Prif.
 
 
-## Outra maneira (somente utilizar a classe Prif no seu projeto):
+## Outra maneira de execução (somente utilizar a classe Prif no seu projeto):
 
-> Copie os arquivos dentro da pasta notebook
+> Copie a pasta notebook.
 
-> importe a classe prif: ```from notebook import prif```
+> importe a classe prif: ```from notebook import prif```.
 
-> instancie a classe: ```prif.Prif()```
+> instancie a classe: ```prif.Prif()```.
 
-> utilize a função responder: ```prif.respoder(sua_pergunta)```
+> utilize a função responder: ```prif.respoder(sua_pergunta)```.
 
 ## Diagrama da Arquitetura ao Final do Projeto 
 ![Screenshot](ArquiteturaDoProjeto.png)

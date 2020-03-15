@@ -24,6 +24,7 @@
 
 ## Estado Atual
 
+- Projeto funcionado com uma classe principal integrando todas as funcionalidades, recebendo uma pergunta, processando-a e buscando no banco de dados uma entidade de resposta. Ainda não há processamento de uma resposta e tratamento para resposta diferentes de uma entidade.
 - Classe principal Prif responsável pela integração das funcionalidades do sistema, recebendo uma pergunta e retornando uma lista com tentativas de resposta para cada sinônimo referente a propriedade na pergunta. 
 - Classe RotinaBD que busca a resposta a pergunta no banco de dados.
 - Classe QuestionProcessing: primeira versão com retorno de dicionario: {entidade, propriedade, indicadorPergunta, sinonimoPropriedade}, utilizando apenas o WordNet para desambiguar.

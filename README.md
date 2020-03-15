@@ -23,26 +23,44 @@
 - jupyter
 
 ## Estado Atual
-- Arquivo jupyter do processamento das perguntas, processando as perguntas e buscando a resposta utilizando a classe RotinaBD
+
+- Classe principal Prif responsável pela integração das funcionalidades do sistema, recebendo uma pergunta e retornando uma lista com tentativas de resposta para cada sinônimo referente a propriedade na pergunta. 
 - Classe RotinaBD que busca a resposta a pergunta no banco de dados.
-- Classe QuestionProcessing: primeira versão com retorno de dicionario: {entidade, propriedade, indicadorPergunta, sinonimoPropriedade}, utilizando apenas o WordNet para desambiguar
+- Classe QuestionProcessing: primeira versão com retorno de dicionario: {entidade, propriedade, indicadorPergunta, sinonimoPropriedade}, utilizando apenas o WordNet para desambiguar.
 
 ## Como executar o projeto (versão atual):
+
+- Opcional:
 
 > Criar a virtual env ```vitualenv [nomeDaVM]```
 
 > Prepare o ambiente virtual ``` source [nomeDaVM]/bin/activate```
 
-> Clone o repositório ```git clone [Repositório]```
+- Recomendado:
 
-> Vá para a pasta do repositório ```cd [Repositório]```
+> Clone o repositório ```git clone [Repositório]```.
 
-> Instalar pacotes necessários ```pip3 install -r requirements.txt```
+> Vá para a pasta do repositório ```cd [Repositório]```.
 
-> Suba o servidor de notebooks ```jupyter notebook```
+> Instalar pacotes necessários ```pip3 install -r requirements.txt```.
+
+> Suba o servidor de notebooks ```jupyter notebook```.
+
+> Abra o arquivo notebook/Testar classe Prif.
+
+
+## Outra maneira (somente utilizar a classe Prif no seu projeto):
+
+> Copie os arquivos dentro da pasta notebook
+
+> importe a classe prif: ```from notebook import prif```
+
+> instancie a classe: ```prif.Prif()```
+
+> utilize a função responder: ```prif.respoder(sua_pergunta)```
 
 ## Diagrama da Arquitetura ao Final do Projeto 
-![Screenshot](ArquiteturaDoProjeto.jpg)
+![Screenshot](ArquiteturaDoProjeto.png)
 
 ## Diagrama do Banco de dados
 ![Screenshot](notebook/database/databaseIC.jpeg)

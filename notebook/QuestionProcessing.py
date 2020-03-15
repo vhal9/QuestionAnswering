@@ -25,15 +25,6 @@ class QuestionProcessing(object):
             query['sinonimosPropriedade'].append(self.desambiguarPropriedade(propriedade))
 
         return query
-    
-    """Pre Processamento sintatico: normalizar """
-    """Entrada: string"""
-    """Saida: lista de string
-    def normalizar(question):
-        #line = self.normalizer.lowercase(question)
-        line = self.normalizer.tokenize_sentences(line)
-        return line
-    """
     # Extrair elementos principais da pergunta
     """Entrada: doc"""
     """Saida: dicionario{
@@ -64,20 +55,16 @@ class QuestionProcessing(object):
     """Saida: lista de string"""
     def getEntidade(self,question):
         propn = []
-        print('question', question)
         for tupla in question:
             if tupla[2] == 'PROPN':
                 propn.append(tupla[1])
         if propn == []:
-            print('entrou B')
             for tupla in question:
                 if tupla[6] == 'B':
                     propn.append(tupla[1])
         if propn == []:
-            print('entrou', question)
             for tupla in question:
                 if tupla[4] == "ROOT":
-                    print('entrou', tupla[0])
                     propn.append(tupla[1])
         return propn
     # Extrair propriedade/verbo

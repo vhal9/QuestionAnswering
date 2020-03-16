@@ -18,7 +18,7 @@
 - sqlite3
 - os
 - pandas
-### bibliotecas para desenvolvimento(opcionais)
+### Desenvolvimento(opcionais)
 - virtualenv
 - jupyter
 

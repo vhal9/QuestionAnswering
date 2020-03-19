@@ -1,8 +1,8 @@
 jupyter
-unicode
+unidecode
 nltk
 spacy
 requests
 wikipedia
-os
+os-sys
 pandas

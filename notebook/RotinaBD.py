@@ -29,22 +29,17 @@ class RotinaBD():
     '''Funcao para extrair do banco de dado(s) as entidade(s) a partir do(s) id(s) da(s) entidade(s) e id(s) da(s) propriedade(s) consultando no BD a(s) relacao(oes) com o(s) id(s) da(s) entidade(s) e da(s) propriedade(s)'''
     '''Entrada: lista de idEntidade e lista idPropriedade, ambas em formato string'''
     '''Saida: lista de nomes no formato string'''
-    def buscarNoBD(self, idEntidade, idPropriedade):
+    def buscarValor(self, idEntidade, idPropriedade):
         #print("buscando a entidade resposta ...")
-        ids = []
+        respostas = []
         for id in idEntidade:
             for idP in idPropriedade:
                 print('buscando',id, idP)
-                resultado = self.db.getEntitieInRelation(id, idP)
+                resultado = self.db.getValorInRelation(id, idP)
                 for tupla in resultado:
                     for string in tupla:
-                        ids.append(string)
-        resposta = []
-        for id in ids:
-            #verificar se a entidade esta mapeada
-            nome = self.buscarNomeEntidade(id)
-            resposta.append([id, nome])
-        return resposta
+                        respostas.append(string)
+        return respostas
     '''Funcao para verificar se ha correspondencia entre um id Entidade com o banco de dados
        Entrada: string
        saida: booleano
@@ -112,6 +107,7 @@ class RotinaBD():
         dataEntitie = self.api.getEntitie(id, site, title).json()['entities']
         #print("extraindo informações...")
         dadosEntidade = self.extrairInformacaoDaEntidade(dataEntitie, dados)
+        #dadosPropriedads
         dadosPropriedades = self.extrairPropriedadesDaEntidade(dataEntitie)
         #print("inserindo no banco de dados...")
         #print(dadosEntidade)
@@ -158,37 +154,60 @@ class RotinaBD():
     '''Entrada: dicionario com os dados extraidos sobre a entidade na wikidata'''
     '''Saida: dicionario com id da entidade e outro dicionario com as propriedades e entidades associadas do tipo: '''
     '''
-        {entidade:
-            {propriedade1: entidade1, propriedade2:entidade2, ...}
-        }
+            [propriedade1, [valor, tipo]]
     '''
     def extrairPropriedadesDaEntidade(self, dataEntitie):
-        relacoes = {}
-        propriedades = {}
+        relacoes = []
         qId = None
         for key in dataEntitie:
             qId = key
-        for relacao in dataEntitie[qId]['claims']:
-            try:
-                propriedades[relacao] = dataEntitie[qId]['claims'][relacao][0]['mainsnak']['datavalue']['value']['id']
-                pass
-            except Exception as e:
-                propriedades[relacao] = 'desconhecido'
-        relacoes[qId] = propriedades
+        for propriedade in dataEntitie[qId]['claims']:
+            quantPropriedades = len(dataEntitie[qId]['claims'][propriedade])
+            for valor in range(0,quantPropriedades):
+                #coordenada global
+                conteudo = ''
+                if dataEntitie[qId]['claims'][propriedade][valor]['mainsnak']['datatype'] == 'globe-coordinate':
+                    conteudo += str(dataEntitie[qId]['claims'][propriedade][valor]['mainsnak']['datavalue']['value']['latitude'])
+                    conteudo += str(dataEntitie[qId]['claims'][propriedade][valor]['mainsnak']['datavalue']['value']['longitude'])
+                else:
+                    #id externo
+                    if dataEntitie[qId]['claims'][propriedade][valor]['mainsnak']['datatype'] == 'external-id':
+                        conteudo = dataEntitie[qId]['claims'][propriedade][valor]['mainsnak']['datavalue']['value']
+                    else:
+                        #wikidata item
+                        if dataEntitie[qId]['claims'][propriedade][valor]['mainsnak']['datatype'] == 'wikibase-item':
+                            conteudo = dataEntitie[qId]['claims'][propriedade][valor]['mainsnak']['datavalue']['value']['id']
+                        else:
+                            if dataEntitie[qId]['claims'][propriedade][valor]['mainsnak']['datatype'] == 'time':
+                                conteudo = dataEntitie[qId]['claims'][propriedade][valor]['mainsnak']['datavalue']['value']['time']
+                            else:
+                                if dataEntitie[qId]['claims'][propriedade][valor]['mainsnak']['datatype'] == 'quantity':
+                                    conteudo = dataEntitie[qId]['claims'][propriedade][valor]['mainsnak']['datavalue']['value']['amount']
+                                else:
+                                    if dataEntitie[qId]['claims'][propriedade][valor]['mainsnak']['datatype'] in ['string', 'url', 'commonsMedia', 'geo-shape']:
+                                        conteudo = dataEntitie[qId]['claims'][propriedade][valor]['mainsnak']['datavalue']['value']
+                                    else:
+                                        if dataEntitie[qId]['claims'][propriedade][valor]['mainsnak']['datatype'] == 'monolingualtext':
+                                            conteudo = dataEntitie[qId]['claims'][propriedade][valor]['mainsnak']['datavalue']['value']['text']
+                                        else:
+                                            conteudo = 'desconhecido'
+                tipo = dataEntitie[qId]['claims'][propriedade][valor]['mainsnak']['datatype']
+                relacoes.append([propriedade, [conteudo, tipo]])
         return relacoes
 
     '''Metodo para salvar os dados baixados na wikidata, salvando a entidade e as relacoes a ela'''
-    '''Entrada: dicionrio com informacoes sobre a entidade e dicionario com as relacoes sobre a entidade'''
+    '''Entrada:  dicionario com informacoes sobre a entidade e dicionario com as relacoes sobre a entidade'''
     def inserirDados(self, entidade, relacoes):
         #inserir entidade
         self.db.insertEntitie(entidade)
         #inserir relacoes
-        for idEntidade in relacoes:
-            for property in relacoes[idEntidade]:
-                relation = [idEntidade, relacoes[idEntidade][property], property]
-                if relacoes[idEntidade][property] != 'desconhecido':
-                    #print('inserindo', relation)
-                    self.db.insertRelation(relation)
+        for relacao in relacoes:
+            propriedade = relacao[0]
+            valor = relacao[1]
+            if valor != 'desconhecido':
+                relation = [entidade['id'], valor[0], propriedade]
+                self.db.insertValue(valor)
+                self.db.insertRelation(relation)
 
     '''Funcao para extrair lista de informacoes de um objeto de retorno do banco de dados'''
     '''Entrada: objeto formato sql'''
@@ -237,7 +256,7 @@ class RotinaBD():
             #print(idPropriedade)
             # buscar entidade resposta
             #print("buscando relacao...")
-            resposta = self.buscarNoBD(idEntidade, idPropriedade)
+            resposta = self.buscarValor(idEntidade, idPropriedade)
             pass
         except Exception as e:
             raise e

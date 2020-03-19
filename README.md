@@ -28,6 +28,7 @@
 - Classe principal Prif responsável pela integração das funcionalidades do sistema, recebendo uma pergunta e retornando uma lista com tentativas de resposta para cada sinônimo referente a propriedade na pergunta. 
 - Classe RotinaBD que busca a resposta a pergunta no banco de dados.
 - Classe QuestionProcessing: primeira versão com retorno de dicionario: {entidade, propriedade, indicadorPergunta, sinonimoPropriedade}, utilizando apenas o WordNet para desambiguar.
+- Banco de dados modificado, novo tratamento dos valores, tendo uma nova tabela value.
 
 ## Como executar o projeto (versão atual):
 
@@ -64,5 +65,5 @@
 ![Screenshot](ArquiteturaDoProjeto.png)
 
 ## Diagrama do Banco de dados
-![Screenshot](notebook/database/databaseIC.jpeg)
+![Screenshot](notebook/database/database.png)
 

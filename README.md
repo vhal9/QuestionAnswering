@@ -10,6 +10,7 @@
 - unicode
 - nltk
 - spacy
+- Wordnet
 
 ### Rotinas de requisições
 - requests

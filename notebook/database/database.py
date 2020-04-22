@@ -10,8 +10,9 @@ class Database:
     def createTables(self):
         createEntitie = "CREATE TABLE IF NOT EXISTS entitie(idEnt TEXT PRIMARY KEY NOT NULL, name TEXT, desc TEXT, pageid TEXT, url TEXT)"
         createProperty = "CREATE TABLE IF NOT EXISTS property(idProp TEXT PRIMARY KEY NOT NULL, desc TEXT)"
-        createRelation = "CREATE TABLE IF NOT EXISTS relation(idEnt1 TEXT, textValue TEXT, idProp TEXT, PRIMARY KEY(idEnt1, textValue, idProp), FOREIGN KEY(idProp) REFERENCES property(idProp), FOREIGN KEY(idEnt1) REFERENCES entitie(idEnt), FOREIGN KEY (textValue) REFERENCES value(text))"
         createValue = "CREATE TABLE IF NOT EXISTS value(text TEXT PRIMARY KEY NOT NULL, dataType TEXT)"
+        createRelation = "CREATE TABLE IF NOT EXISTS relation(idEnt1 TEXT, textValue TEXT, idProp TEXT, PRIMARY KEY(idEnt1, textValue, idProp), FOREIGN KEY(idProp) REFERENCES property(idProp), FOREIGN KEY(idEnt1) REFERENCES entitie(idEnt), FOREIGN KEY (textValue) REFERENCES value(text))"
+        
         try:
             self.c.execute(createEntitie)
             self.c.execute(createProperty)
@@ -56,7 +57,7 @@ class Database:
             print('Não foi possivel inserir', e)
 
     """inserir relacao"""
-    """entrada: lista: [ID ENTIDADE 1, ID ENTIDADE 2, ID PROPRIEDADE]"""
+    """entrada: lista: [ID ENTIDADE, Value, ID PROPRIEDADE]"""
     def insertRelation(self, relation):
         try:
             insert = "INSERT INTO relation VALUES('"+ relation[0] + "','" + relation[1] + "','" + relation[2] +"')"
@@ -79,6 +80,7 @@ class Database:
     def insertValue(self,value):
         try:
             insert = "INSERT INTO value VALUES('" + value[0] + "','" + value[1] + "')" 
+            print(insert)
             pass
         except Exception as e:
             print('erro na lista de entrada')
@@ -133,14 +135,17 @@ class Database:
     def getAllRelation(self):
         consulta = "SELECT * FROM relation"
         return self.getAccess(consulta)
-    """consultar relacoes retornando (nome Entidade 1, propriedade, idEnt 2)"""
+    """consultar relacoes retornando (nome Entidade 1, propriedade, Value)"""
     def getAllRelations(self):
         consulta = "SELECT E.name, P.desc, R.textValue FROM ((entitie E INNER JOIN relation R ON E.idEnt = R.idEnt1) INNER JOIN property P ON R.idProp = P.idProp"
         return self.getAccess(consulta)
     """consultar relacao por entidade"""
     def getRelation(self, idEntidade):
-        consulta = "SELECT E.name, P.desc, R.value FROM (entitie E LEFT JOIN relation R ON E.idEnt = R.idEnt1) LEFT JOIN property P ON R.idProp = P.idProp WHERE E.idEnt = '"+idEntidade+"'"
+        consulta = "SELECT E.name, P.desc, R.value FROM (entitie E INNER JOIN relation R ON E.idEnt = R.idEnt1) LEFT JOIN property P ON R.idProp = P.idProp WHERE E.idEnt = '"+idEntidade+"'"
         return self.getAccess(consulta)
+
+
+    """consultar todas os Values"""
     def getAllValues(self):
         consulta = "SELECT * FROM value"
         return self.getAccess(consulta)
@@ -150,6 +155,11 @@ class Database:
         consulta = "SELECT R.textValue From relation R WHERE R.idEnt1 = '"+idEntidade+"' AND R.idProp = '"+idProperty+"'"
         #consulta = "SELECT E.name FROM (entitie E INNER JOIN relation R ON E.idEnt = R.idEnt2) WHERE R.idEnt1 = '"+idEntidade+"' AND R.idProp = '"+idProperty+"'"
         print(consulta)
+        return self.getAccess(consulta)
+
+    """consultar um valor a partir de seu id"""
+    def getValue(self, id):
+        consulta = "SELECT * FROM Value WHERE text = '"+id+"'"
         return self.getAccess(consulta)
 ############################################################################################################################## 
     """funcao responsavel por realizar uma consulta especificada ao banco de dados"""

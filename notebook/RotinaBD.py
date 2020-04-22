@@ -26,8 +26,10 @@ class RotinaBD():
         resultado = self.db.getPropertyID(propriedade)
         ids = self.extracaoDeStringDoObjetoDoBD(resultado)
         return ids
-    '''Funcao para extrair do banco de dado(s) as entidade(s) a partir do(s) id(s) da(s) entidade(s) e id(s) da(s) propriedade(s) consultando no BD a(s) relacao(oes) com o(s) id(s) da(s) entidade(s) e da(s) propriedade(s)'''
-    '''Entrada: lista de idEntidade e lista idPropriedade, ambas em formato string'''
+    '''Funcao para extrair do banco de dados os valores nas relações a partir dos ids das entidades e ids das
+        propriedades
+    '''
+    '''Entrada: lista de idEntidade e lista idPropriedade, ambos em formato string'''
     '''Saida: lista de nomes no formato string'''
     def buscarValor(self, idEntidade, idPropriedade):
         #print("buscando a entidade resposta ...")
@@ -35,7 +37,7 @@ class RotinaBD():
         for id in idEntidade:
             for idP in idPropriedade:
                 print('buscando',id, idP)
-                resultado = self.db.getValorInRelation(id, idP)
+                resultado = self.db.getValueInRelation(id, idP)
                 for tupla in resultado:
                     for string in tupla:
                         respostas.append(string)
@@ -102,14 +104,14 @@ class RotinaBD():
         site = dados[0]['concepturi']
         id = dados[0]['id']
         title = dados[0]['title']
-        #print("entidade encontrada:")
+        print("entidade encontrada:")
         #print(id, title, site)
         dataEntitie = self.api.getEntitie(id, site, title).json()['entities']
-        #print("extraindo informações...")
+        print("extraindo informações...")
         dadosEntidade = self.extrairInformacaoDaEntidade(dataEntitie, dados)
         #dadosPropriedads
         dadosPropriedades = self.extrairPropriedadesDaEntidade(dataEntitie)
-        #print("inserindo no banco de dados...")
+        print("inserindo no banco de dados...")
         #print(dadosEntidade)
         self.inserirDados(dadosEntidade, dadosPropriedades)
     '''Funcao para extrair informações do json da entidade recuperado na wikidata'''
@@ -199,11 +201,13 @@ class RotinaBD():
     '''Entrada:  dicionario com informacoes sobre a entidade e dicionario com as relacoes sobre a entidade'''
     def inserirDados(self, entidade, relacoes):
         #inserir entidade
+        print('inserindo a entidade', entidade)
         self.db.insertEntitie(entidade)
         #inserir relacoes
         for relacao in relacoes:
             propriedade = relacao[0]
             valor = relacao[1]
+            print('valor',valor)
             if valor != 'desconhecido':
                 relation = [entidade['id'], valor[0], propriedade]
                 self.db.insertValue(valor)
@@ -226,8 +230,9 @@ class RotinaBD():
         for ent in dados['entidade']:
             entidade += ent
         consulta = {}
-        consulta['entidade'] = entidade
+        consulta['entidade'] = entidades
         respostas = []
+        print('consulta', consulta)
         for listaSinonimos in dados['sinonimosPropriedade']:
             for sinonimo in listaSinonimos:
                 consulta['propriedade'] = sinonimo
@@ -240,9 +245,9 @@ class RotinaBD():
     def buscarInformacao(self, dados):
         resposta = []
         # verificar se ha correspondencia da entidade no banco de dados
-        #print("verificando se há correspondencia da entidade na Base de Dados...")
+        print("verificando se há correspondencia da entidade na Base de Dados...")
         if (not self.verificarEntidade(dados['entidade'])):
-            #print("entidade não encontrada \nbuscando na wikidata")
+            print("entidade não encontrada \nbuscando na wikidata")
             #se nao, baixar os dados da entidade e seus claims
             self.baixarInformacao(dados['entidade'])
         try:

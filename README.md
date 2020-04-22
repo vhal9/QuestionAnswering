@@ -34,21 +34,36 @@
 
 - Opcional:
 
-> Criar a virtual env ```vitualenv [nomeDaVM]```.
+  - Criar um Virtual environment:
 
-> Prepare o ambiente virtual ``` source [nomeDaVM]/bin/activate```.
+  ```sh
+  sudo pip3 install virtualenv
+  virtualenv [nomeDaVM]
+  ```
+  - Preparar o ambiente virtual:
+  ```sh
+  source [nomeDaVM]/bin/activate
+  ```
 
 - Recomendado:
 
-> Clone o repositório ```git clone [Repositório]```.
-
-> Vá para a pasta do repositório ```cd [Repositório]```.
-
-> Instalar pacotes necessários ```pip3 install -r requirements.txt```.
-
-> Suba o servidor de notebooks ```jupyter notebook```.
-
-> Abra o arquivo notebook/Testar classe Prif.
+  - Clone o repositório:
+  ```sh
+  git clone [Repositório]
+  ```
+  - Vá para a pasta do repositório: 
+  ```sh
+  cd [Repositório]
+  ```
+  - Instale pacotes necessários:
+  ```sh
+  pip3 install -r requirements.txt
+  ```
+  - Suba o servidor de notebooks:
+  ```sh
+  jupyter notebook
+  ```
+  - Abra o arquivo notebook/Testar classe Prif.
 
 
 ## Outra maneira de execução (somente utilizar a classe Prif no seu projeto):
@@ -59,7 +74,7 @@
 
 > instancie a classe: ```prif.Prif()```.
 
-> utilize a função responder: ```prif.respoder(sua_pergunta)```.
+> utilize a função responder: ```prif.responder(sua_pergunta)```.
 
 ## Diagrama da Arquitetura ao Final do Projeto 
 ![Screenshot](ArquiteturaDoProjeto.png)

@@ -1,7 +1,7 @@
 # QuestionAnswering
 
 ## Resumo:
-  Este repositório contém o desenvolvimento de um projeto de IC, que consiste em uma ferramenta de perguntas e respostas com enfâse em linguagem informal, utilizando a base de conhecimento estruturados da Wikidata e não estruturados da Wikipedia.
+  Este repositório contém o desenvolvimento de um projeto de IC, que consiste em uma ferramenta de perguntas e respostas com enfâse em linguagem informal, utilizando as bases de conhecimento estruturados da Wikidata e não estruturados da Wikipedia.
 
 ## Projeto Desenvolvido no Python 3.6.
 
@@ -24,13 +24,29 @@
 
 ## Estado Atual
 
-- Projeto funcionado com uma classe principal integrando todas as funcionalidades, recebendo uma pergunta, processando-a e buscando no banco de dados uma entidade de resposta. Ainda não há processamento de uma resposta e tratamento para resposta diferentes de uma entidade.
-- Classe principal Prif responsável pela integração das funcionalidades do sistema, recebendo uma pergunta e retornando uma lista com tentativas de resposta para cada sinônimo referente a propriedade na pergunta. 
-- Classe RotinaBD que busca a resposta a pergunta no banco de dados.
-- Classe QuestionProcessing: primeira versão com retorno de dicionario: {entidade, propriedade, indicadorPergunta, sinonimoPropriedade}, utilizando apenas o WordNet para desambiguar.
+- Projeto funcionando com uma classe principal integrando todas as funcionalidades, em que recebe uma pergunta, processando-a e buscando correspondências nas bases de conhecimento. Ainda não o Processamento da resposta como uma frase.
+
+- Classe principal Prif é responsável pela integração das funcionalidades do sistema, recebendo uma pergunta e retornando uma lista com possíveis respostas, utilizando o Wordnet para buscar sinônimos referentes as propriedades na pergunta.
+
+- Classe QuestionProcessing: primeira versão com retorno de dicionario: {entidade, propriedade, indicadorPergunta, sinonimosPropriedade}, utilizando apenas o WordNet para desambiguar.
+
+- Classe RotinaBD: busca a resposta a pergunta no banco de dados.
+
 - Banco de dados modificado, novo tratamento dos valores, tendo uma nova tabela value.
 
 ## Como executar o projeto (versão atual):
+
+### Executar como biblioteca: 
+
+> Copie a pasta notebook para seu diretório.
+
+> importe a classe prif no seu projeto: ```from notebook import prif```.
+
+> instancie a classe: ```objeto = prif.Prif()```.
+
+> utilize a função responder passando como parâmetro sua pergunta: ```prif.responder(sua_pergunta)```.
+
+### Executar o projeto:
 
 - Opcional:
 
@@ -65,16 +81,6 @@
   ```
   - Abra o arquivo notebook/Testar classe Prif.
 
-
-## Outra maneira de execução (somente utilizar a classe Prif no seu projeto):
-
-> Copie a pasta notebook.
-
-> importe a classe prif: ```from notebook import prif```.
-
-> instancie a classe: ```prif.Prif()```.
-
-> utilize a função responder: ```prif.responder(sua_pergunta)```.
 
 ## Diagrama da Arquitetura ao Final do Projeto 
 ![Screenshot](ArquiteturaDoProjeto.png)

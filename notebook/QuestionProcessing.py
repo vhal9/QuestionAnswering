@@ -1,12 +1,10 @@
 import nltk
-from nlp import lexical
 from nlp import morphosyntax
 from nltk.corpus import wordnet as wn
 
 class QuestionProcessing(object):
     """docstring for QuestionProcessing"""
     def __init__(self):
-        self.normalizer = lexical.Preprocessing()
         self.morpho = morphosyntax.Morpho()
         
     """Função principal que processa a pergunta e retorna suas partes principais para consulta na base de conhecimento""" 
@@ -15,10 +13,9 @@ class QuestionProcessing(object):
 
     def processar(self, question):
         #normalizar texto
-        #question = self.normalizar(question)
         #processar morfologicamente o texto
         doc = self.morpho.tag(question)
-        #consulta = {'entidade': [], 'propriedade':[], 'indPergunta':[]}
+        #query = {'entidade': [], 'propriedade':[], 'indPergunta':[], 'propriedadeOrigem':[]}
         query = self.extrairPalavrasChaves(doc)
         query['sinonimosPropriedade'] = []
         for propriedade in query['propriedade']:
@@ -38,6 +35,7 @@ class QuestionProcessing(object):
         entidade = self.getEntidade(doc)
         ind = self.getIND(doc)
         property = self.getProperty(doc)
+        propertyOrigin = self.getPropertyOrigin(doc)
         """para cada tupla
         for tupla in doc: 
             entidade = self.getEntidade(doc)
@@ -48,7 +46,7 @@ class QuestionProcessing(object):
             #print(ind, property, entidade, '\n')
             query = {'indPergunta':ini, 'propriedade': property, 'entidade': entidade}
         """
-        query = {'indPergunta':ind, 'propriedade': property, 'entidade': entidade}
+        query = {'indPergunta':ind, 'propriedade': property, 'entidade': entidade, 'propriedadeOrigem':propertyOrigin}
         return query
     # Extrair entidade
     """Entrada: Doc"""
@@ -70,6 +68,12 @@ class QuestionProcessing(object):
     # Extrair propriedade/verbo
     """Entrada: DOC"""
     """Saida: lista de string"""
+    def getPropertyOrigin(self, question):
+        props = []
+        for tupla in question:
+            if tupla[2] == 'VERB' or tupla[2] == "NOUN":
+                props.append(tupla[0])
+        return props
     def getProperty(self,question):
         props = []
         for tupla in question:

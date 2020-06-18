@@ -114,6 +114,9 @@ class Database:
     def getNomeEntidade(self, idEntidade):
         consulta = "SELECT name FROM entitie WHERE entitie.idEnt = '"+ idEntidade + "'"
         return self.getAccess(consulta)
+    def getDescricaoEntidade(self,idEntidade):
+        consulta = "SELECT desc FROM entitie WHERE entitie.idEnt = '"+ idEntidade + "'"
+        return self.getAccess(consulta)
 
     """consultar todas propriedades"""
     def getAllProperty(self):

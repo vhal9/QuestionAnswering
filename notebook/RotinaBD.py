@@ -27,16 +27,43 @@ class RotinaBD():
             self.baixarInformacao(dados['entidade'])
 
         respostas = []
-        print('consulta', consulta)
-        for listaSinonimos in dados['sinonimosPropriedade']:
-            for sinonimo in listaSinonimos:
-                consulta['propriedade'] = sinonimo
-                valor = self.buscarInformacao(consulta)
-                if valor != []:
-                    resposta = [consulta['entidade'], consulta['propriedade'], valor]
-                    respostas.append(resposta)
+        
+        # Processo para perguntas do tipo 'Quem é'
+        if dados['propriedade'] ==  ['ser'] and dados['indPergunta']== ['Quem']:
+            print("pergunta do tipo quem é")
+            try:
+                idEntidade = self.buscarIdEntidade(consulta['entidade'])
+                valor = []
+                for id in idEntidade:
+                    valor = self.buscarDescricaoEntidade(id)
+                for resposta in valor:
+                    respostas.append(resposta[0])
+                print(respostas)
+                pass
+            except Exception as e:
+                print(e)
+                respostas = []
+        else:
+            for listaSinonimos in dados['sinonimosPropriedade']:
+                for sinonimo in listaSinonimos:
+                    consulta['propriedade'] = sinonimo
+                    valor = self.buscarInformacao(consulta)
+                    if valor != []:
+                        resposta = valor
+                        respostas.append(resposta)
         return respostas
 
+    '''Funcao para retornar descricao de uma entidade'''
+    '''entrada = idEntidade '''
+    '''saida = Valor'''
+    def buscarDescricaoEntidade(self,idEntidade):
+        try:
+            resposta = self.db.getDescricaoEntidade(idEntidade)
+            pass
+        except Exception as e:
+            raise(e)
+            resposta = []
+        return resposta
     '''Funcao para retornar entidades como resposta a consultas do tipo entidade(propriedade, X)'''
     '''entrada = dados = {'entidade': ' ', propriedade' '}'''
     '''saida = [Valor]'''
